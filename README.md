@@ -95,7 +95,7 @@ def test_01() --> None:
     print('Hello, world.')
 
 def test_02(input) --> None:
-    return input
+    print input
 ...
 
 ...
