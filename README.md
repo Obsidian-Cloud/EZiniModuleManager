@@ -1,6 +1,4 @@
-# EZiniModuleManager
 A simple, modular, yet powerful python module manager. Easily configurable. Get your new projects started with breeeze, without bloat.
-
 
 # EZini Module Manager
 
@@ -13,9 +11,9 @@ To get a mental model before we start, it looks/works like this:
 ```mermaid
 graph TD;
 app.py-->module_manager;
-Module Manager-->module_A;
-Module Manager-->module_B;
-Module Manager-->module_C;
+module_manager-->module_A;
+module_manager-->module_B;
+module_manager-->module_C;
 module_A-->registry;
 module_B-->registry;
 module_C-->registry;
