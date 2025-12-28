@@ -99,11 +99,12 @@ def test_02(input) --> None:
 ...
 
 ...
-register_func(*(test_01, test_02))
+register_func(test_01, test_02)
 ```
 
 
-Now, also make sure that ```register_func()``` is called **BELOW** all of your defined shared functions, otherwise, you're passing ```None``` type values.
+Now, also make sure that ```register_func()``` is called **BELOW** all of your defined shared functions, otherwise, you're passing ```None``` type values. The *args in the function just means
+that it takes any number of positional arguments. In this case, a tuple. You can add as many functions as you want, comma separated.
 
 ---
 ## Calling Functions
