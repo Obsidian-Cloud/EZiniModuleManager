@@ -93,11 +93,12 @@ from registry import register_func
 ...
 
 ...
-def test_01() --> None:
+def test_01() -> None:
     print('Hello, world.')
 
-def test_02(input) --> None:
+def test_02(input) -> bool:
     print input
+    return True
 ...
 
 ...
