@@ -26,7 +26,7 @@ module_C-->registry;
 ```  
 
 
-
+---
 ## Module Manager
 
 >**The ```module_manager``` is initialized by your main application ( app.py, \_\_init\_\_.py, etc ). Basically wherever your apps main entry point is.**
@@ -46,7 +46,7 @@ from module_manager import import_modlist
 modlist = ['module_A', 'module_B', 'module_C']
 import_modlist(modlist)
 ```
-or
+**or**
  ```python
 # app.py
 
@@ -72,15 +72,14 @@ You might notice how these module names align with the diagram above. That's bec
 ```import_modlist()``` is injecting your list of modules into the module_manager, so it can import your modules one at a time
 in an event-driven manner. We aren't done yet though. There isn't much left. Next is the fun part, assigning functions to variables.
 
-
+---
 ## Adding Your Modules
 
-Now that the ```module_manager``` has the names of your modules, we need to register the functions from those modules with the ```registry``` so they actually get shared. It's easier than it sounds.
+Now that the ```module_manager``` has the names of your modules(module_A, module_B, module_C), we need to register the functions from those modules with the ```registry``` so they actually get shared. It's easier than it sounds.
 
-For each module that we want to extract functions from, we need to explicitly import the ```registry``` into that module. These are the modules we added above, (A, B, and C) to the ```module manager```. We also need to call a carefully curated function from the 
-registry to now register these functions called:
+For each module, we need to explicitly import the ```registry```. We also need to call a carefully curated function from the registry to now register these functions:
 ```
-register_func(**kwargs)
+register_func(*args)
 ```
 
 To do this, we can follow this example:
@@ -88,21 +87,40 @@ To do this, we can follow this example:
 ```python
 # module_A.py
 
-from registry import register_func, call_func
+from registry import register_func
+...
 
+...
 def test_01() --> None:
     print('Hello, world.')
 
-def test_02() --> None:
-    print('Goodbye, world.')
+def test_02(input) --> None:
+    return input
+...
 
+...
+register_func(*(test_01, test_02))
 ```
 
 
+Now, also make sure that ```register_func()``` is called **BELOW** all of your defined shared functions, otherwise, you're passing ```None``` type values.
 
+---
+## Calling Functions
+
+---
 ## The Registry
+A simple function cheat sheet
+#### Register
 
-Text here
+#### Call
+
+
+Example uses interacting with the ```registry```:
+
+```
+```
+
 
 
 
