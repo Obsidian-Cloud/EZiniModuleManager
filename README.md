@@ -16,15 +16,17 @@ To get a mental model before we start, it looks/works like this:
 
 ```mermaid
 graph TD;
-app.py-->module_manager;
+app.py:::whiteClass-->module_manager;
 module_manager-->module_A;
-module_manager-->module_B;
+module_manager:::orangeClass-->module_B;
 module_manager-->module_C;
-module_A-->registry;
-module_B-->registry;
-module_C-->registry;
-```  
+module_A:::whiteClass-->registry;
+module_B:::whiteClass-->registry:::orangeClass;
+module_C:::whiteClass-->registry;
 
+classDef orangeClass fill:#ffb870,stroke:#333,stroke-width:2px;
+classDef whiteClass fill:#ffffff,stroke:#333,stroke-width:2px;
+```  
 
 ---
 ## Module Manager
@@ -108,6 +110,8 @@ that it takes any number of positional arguments. In this case, a tuple. You can
 
 ---
 ## Calling Functions
+Calling functions is even easier. 
+
 
 ---
 ## The Registry
