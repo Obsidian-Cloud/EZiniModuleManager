@@ -294,7 +294,11 @@ def king_arthur():
 ```
 
 You will see how to manipulate these objects in the next section, 
-[Getting Objects](#3-getting-objects).  
+[Getting Objects](#3-getting-objects).
+
+You can also view the section ['Register Variables'](#register-variables-with-register_obj), to 
+learn how to use a custom function to register variable assignments, since we 
+cannot add decorators to them.
 
 
 ---
