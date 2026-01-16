@@ -3,7 +3,7 @@ import sys
 import os
 import pathlib
 
-from typing import Any, Union, Callable, Mapping
+from typing import Any, Callable, Mapping
 
 from ezmodulemanager.libutils import parse_traceback
 from ezmodulemanager.exceptions import RegistryKeyError, ObjectRegistrationError

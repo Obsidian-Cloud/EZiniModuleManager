@@ -4,7 +4,9 @@
 #PyPI
 python3 -m pip install ezmodulemanager
 ```
-[Visit the PyPi repository]()  
+[Visit the PyPi repository](https://pypi.org/project/ezmodulemanager/)  
+
+[View the 'Quick Start' guide](#quick-start-gated-execution)
 
 ---
 
@@ -50,9 +52,79 @@ module_C:::whiteClass-->registry;
 
 classDef orangeClass fill:#ffb870,stroke:#333,stroke-width:2px;
 classDef whiteClass fill:#ffffff,stroke:#333,stroke-width:2px;
-```  
+```
+---  
+# Quick Start (Gated Execution):
+
+### main.py
+```python
+# main.py
+from ezmodulemanager.module_manager import import_modlist
+from ezmodulemanager.registry import get_obj
+
+import_modlist(['module_B', 'module_A'])
+
+# Once the above modules get imported, THEN we run `main()` in 
+# `module_B` like so. 
+# Modules loaded, now we execute our program.
+get_obj('module_B', 'main')()
+# Output: Stored offering: shrubbery
+```
+This is the same as:
+```python
+main = get_obj('module_B', 'main')
+main()
+```
+---
+### module_A.py
+```python
+# module_A.py
+# Need to import these two functions
+from ezmodulemanager.registry import get_obj, register_obj, mmreg
+
+@mmreg
+class KnightsOfNi():
+    def __init__(self, requirement):
+        self.requirement = requirement
+        self.offering = None
+    
+    def give_offering(self, offering):
+        self.offering = offering
+        
+        if offering == self.requirement:
+            print(f"Accepted: {offering}") 
+            return self
+        print(f"Rejected: {offering}")    
+        return self
+
+
+# Construct and register a specific instance
+knight = KnightsOfNi('shrubbery').give_offering('shrubbery')
+# Output: Accepted: shrubbery
+register_obj(knight, 'knight_of_ni', __file__)
+```
+---
+### module_B.py
+```python
+# module_B.py
+from ezmodulemanager.registry import get_obj, mmreg
+
+@mmreg
+def main():
+    # Access the instance created in Module A without a top-level import
+    print(f"Stored offering: {get_obj('module_A', 'knight_of_ni').offering}")
+
+# `main()` will only get called if this module is run as the
+# top level executable(ie: in command line), OR
+# if we explicitly call it.
+if __name__=='__main__':
+    main()
+```
+With gating being shown in its most simplest form, that is really how all of this comes together. It's about flow. And this structure(gating) allows you to load any modules in any order without dependency issues, while calling any of your objects anywhere, all because none of your modules know about eachother.
 
 ---
+# Extended Guide (No gating, just syntax)
+
 ## 1. Registering Modules
 
 > [!IMPORTANT]
@@ -148,6 +220,8 @@ in an event-driven manner. This is why gating is so important. Once
 `import_modlist()` is called **and has completed execution**, THATS when 
 you want to actually call your functions. Not while the modules are 
 in the middle of being imported. 
+
+---
 
 ### Django, Flask, FastAPI, etc...
 There isn't anything tricky here, as this framework does not attach 
