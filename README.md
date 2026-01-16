@@ -1,4 +1,13 @@
 # EZ Module Manager
+
+```python
+#PyPI
+python3 -m pip install ezmodulemanager
+```
+[Visit the PyPi repository]()  
+
+---
+
 An **_event-driven_** way to decouple your imports and function calls.  
 
 Simple, modular, and powerful. Truly Plug-n-Play.
