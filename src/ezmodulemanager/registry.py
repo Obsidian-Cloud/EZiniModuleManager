@@ -11,22 +11,18 @@ from ezmodulemanager.exceptions import RegistryKeyError, ObjectRegistrationError
 
 _REGISTRY = {}
 
- 
+
 def mmreg(obj: Any)-> Callable[..., Any]:
     """Store an object in the `_Registry` as a decorator.
-    
+
     `@mmreg` automatically stores the containing modules namespace
     as a key for the outermost `dict`. It then stores the object name as
-    a key for the innermost `dict`. Last but not least, it stores the 
-    reference of the object as the value for that 
-    innermost `dict`. You can then use that reference to 
+    a key for the innermost `dict`. Last but not least, it stores the
+    reference of the object as the value for that
+    innermost `dict`. You can then use that reference to
     call on that object.
 
     :param obj: The object to store in the `_REGISTRY`.
-
-    :raises: ObjectRegistrationError: Raised if `register_obj()' is
-        NOT passing a valid object. Usually when an object 
-        registration attempt is done using a str literal.
     """
     # if the module that contains the object is not in the
     # `_REGISTRY`, add the `__module__` as a key with an empty `dict`.
@@ -35,34 +31,33 @@ def mmreg(obj: Any)-> Callable[..., Any]:
     # Then add the object reference as a value to the object `__name__` key.
     _REGISTRY[obj.__module__][obj.__name__] = obj
     return obj
- 
 
 def query_registry()-> Mapping[str, Mapping[str, Any]]:
     """Query the `_REGISTRY` global for entries.
 
-    :returns: Returns a raw query of nested dictionaries within 
+    :returns: Returns a raw query of nested dictionaries within
         the `_REGISTRY`. Each module has its own `dict` which
         contains all objects within its own namespace that are
-        registered with the `_REGISTRY`.    
+        registered with the `_REGISTRY`.
     """
     return _REGISTRY
 
 
 def register_obj(obj: Any, obj_name: str, mod_path: str) -> None:
     """Stores a variable-type object in the `_REGISTRY`.
-            
-    `register_obj()` does the same exact thing as `mmreg()`, 
+
+    `register_obj()` does the same exact thing as `mmreg()`,
     except this allows the control over manual 'registration'
     from a modular standpoint.
 
     :param obj: The object itself to store in the `_REGISTRY`.
-    :param obj_name: The str literal to name the object you are 
+    :param obj_name: The str literal to name the object you are
         'registering'. This acts as the key lookup in the `dict`.
     :param mod_path: This will always be `__file__`. The attribute is
         only avaialble from the module its called from.
 
     :raises: ObjectRegistrationError: Raised if `register_obj()' is
-        NOT passing a valid object. Usually when an object 
+        NOT passing a valid object. Usually when an object
         registration attempt is done using a str literal.
     """
     # Get stemmed pure path for `registry` key.
@@ -72,7 +67,7 @@ def register_obj(obj: Any, obj_name: str, mod_path: str) -> None:
         mod_name = pathlib.PureWindowsPath(mod_path).stem
     else:
         raise OSError
-    
+
     try:
         if mod_name not in _REGISTRY:
             _REGISTRY[mod_name] = {}
@@ -89,19 +84,19 @@ def get_obj(
 ) -> Any:
     """Retrieves an object that has been stored in the `_REGISTRY`.
 
-    :param module_name: The module namespace whose object you 
-        want access to. 
+    :param module_name: The module namespace whose object you
+        want access to.
     :param obj_name: The name of the object within the `module_name`
         to access.
-    :param *args: Variable positional arguments passed to the registered 
+    :param *args: Variable positional arguments passed to the registered
         object. If provided, the object is executed immediately.
     
-    :returns: If no arguments are provided, it returns a reference 
+    :returns: If no arguments are provided, it returns a reference
         to the object itself.
     :returns: If arguments are provided, it executes the object immediately,
         and returns `Any` return value from the executed object.
 
-    :raises: RegistryKeyError: Raised if `module_name` or `obj_name` does 
+    :raises: RegistryKeyError: Raised if `module_name` or `obj_name` does
         not exist in the `registry` component.
     """
     try:
