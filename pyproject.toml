@@ -52,3 +52,4 @@ keywords = [
 [project.urls]
 Documentation = "https://github.com/Obsidian-Cloud/EZModuleManager/blob/main/README.md"
 GitHub = "https://github.com/Obsidian-Cloud/EZModuleManager"
+Issues = "https://github.com/Obsidian-Cloud/EZModuleManager/issues"
