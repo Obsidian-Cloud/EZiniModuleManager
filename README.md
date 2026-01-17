@@ -1,6 +1,6 @@
 # EZ Module Manager
 
-Modular and powerful. Truly Plug-n-Play.
+A plug-n-play, modular Service Locator
 
 
 ```python
