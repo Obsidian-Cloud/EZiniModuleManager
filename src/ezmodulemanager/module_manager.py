@@ -26,8 +26,8 @@ def import_modlist(modlist: Sequence[str]) -> None:
     try:
         for module in modlist:
             _IMPORTED_MODULE = import_module(module)
-            print('Imported Module:', _IMPORTED_MODULE.__name__)
+            # print('Imported Module:', _IMPORTED_MODULE.__name__)
 
     except ModuleNotFoundError:
-        module, line_num = parse_traceback(e_type='ModuleNotFoundError')
-        raise sys.exit(MissingModuleError(module, line_num)) # pyright: ignore
+        parse_traceback()
+        raise sys.exit(MissingModuleError()) # pyright: ignore

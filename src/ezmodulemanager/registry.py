@@ -24,21 +24,16 @@ def mmreg(obj: Any)-> Callable[..., Any]:
 
     :param obj: The object to store in the `_REGISTRY`.
 
-    :raises: FunctionRegistrationError: Raised if `register_obj()' is
+    :raises: ObjectRegistrationError: Raised if `register_obj()' is
         NOT passing a valid object. Usually when an object 
         registration attempt is done using a str literal.
     """
-    try:
-        # if the module that contains the object is not in the
-        # `_REGISTRY`, add the module as a key with an empty `dict`.
-        if obj.__module__ not in _REGISTRY:
-            _REGISTRY[obj.__module__] = {}
-        # Then add the object reference as a value to the object name key.
-        _REGISTRY[obj.__module__][obj.__name__] = obj
-    except (AttributeError):
-        module, line_num = parse_traceback(e_type='AttributeError')
-        raise sys.exit(ObjectRegistrationError(module, line_num)) # pyright: ignore
-
+    # if the module that contains the object is not in the
+    # `_REGISTRY`, add the `__module__` as a key with an empty `dict`.
+    if obj.__module__ not in _REGISTRY:
+        _REGISTRY[obj.__module__] = {}
+    # Then add the object reference as a value to the object `__name__` key.
+    _REGISTRY[obj.__module__][obj.__name__] = obj
     return obj
  
 
@@ -66,7 +61,7 @@ def register_obj(obj: Any, obj_name: str, mod_path: str) -> None:
     :param mod_path: This will always be `__file__`. The attribute is
         only avaialble from the module its called from.
 
-    :raises: FunctionRegistrationError: Raised if `register_obj()' is
+    :raises: ObjectRegistrationError: Raised if `register_obj()' is
         NOT passing a valid object. Usually when an object 
         registration attempt is done using a str literal.
     """
@@ -83,8 +78,8 @@ def register_obj(obj: Any, obj_name: str, mod_path: str) -> None:
             _REGISTRY[mod_name] = {}
         _REGISTRY[mod_name][obj_name] = obj
     except (AttributeError):
-        module, line_num = parse_traceback(e_type='AttributeError')
-        raise sys.exit(ObjectRegistrationError(module, line_num)) # pyright: ignore
+        parse_traceback()
+        raise sys.exit(ObjectRegistrationError()) # pyright: ignore
 
 
 def get_obj(
@@ -118,5 +113,5 @@ def get_obj(
             # Returns the object itself, Any.
             return _REGISTRY[module_name][obj_name]
     except KeyError:
-        module, line_num = parse_traceback(e_type='RegistryKeyError')
-        raise sys.exit(RegistryKeyError(module, line_num)) # pyright: ignore
+        parse_traceback()
+        raise sys.exit(RegistryKeyError()) # pyright: ignore

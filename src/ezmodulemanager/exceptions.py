@@ -4,9 +4,7 @@
 class ModManagerError(Exception):
     """Base exception class for the Mod Manager package."""
     
-    def __init__(self, module, line_num, msg=None):
-        self.module = module
-        self.line_num = line_num
+    def __init__(self, msg=None):
 
         if msg == None:
             msg = 'ModManagerError: A default error has occured.'
@@ -23,31 +21,30 @@ class ModManagerError(Exception):
 ## register_obj() exceptions
 class ObjectRegistrationError(ModManagerError):
     """Raised when not passing a valid object"""
-    def __init__(self, module, line_num):
+    def __init__(self):
 
-        msg = (f'Object registration error in module "{module}" : '
-        f'{line_num}.\n '
-        '.. This occurs when an object name is provided as a `str` '
-        'literal and not the object itself.'
-        )
+        msg = ()
         
-        super().__init__(module, line_num, msg)
+        super().__init__(msg)
 
 
 ## get_obj() exceptions
 class RegistryKeyError(ModManagerError):
     """Raised when a requested objects's key is not found in the 
     :attr:`_REGISTRY`'s `dict{}`."""
-    def __init__(self, module, line_num):
+    def __init__(self):
         
-        msg = (f'Registry key error in module "{module}" : '
-        f'{line_num}. \n '
-        f'.. An `object` was not registered with the `_REGISTRY`'
-        ' or spelled incorrectly. It could also be that you\'re '
-        'trying to access the wrong module namespace.'
-        )
+        msg = ('(RegistryKeyError) A pruned stack summary has '
+        'been output. You can see each `stack trace` in '
+        'ascending order starting from `Stack Trace (1)`. \n'
+        'The idea is to find the offending function(eg., `get_obj()`) '
+        'which most likely has a mispelled argument. \n'
+        'If the arguments are spelled correctly, '
+        'make sure that you have actually registered the objects '
+        'you are trying \nto get with `@mmreg` or `register_obj()`. \n'
+        'Still have questions or problems? My contact info is on PyPI!')
         
-        super().__init__(module, line_num, msg)
+        super().__init__(msg)
 
 
 
@@ -55,12 +52,12 @@ class RegistryKeyError(ModManagerError):
 
 class MissingModuleError(ModManagerError):
     """Raised when `import_modlist()` cant find a specified module."""
-    def __init__(self, module, line_num):
-        #self._import = _import
+    def __init__(self):
+    
 
         msg = (f'A Module was not found by `import_modlist()` in '
-        f'"{module}" on "{line_num}". Make sure to check the '
+        f' on Make sure to check the '
         'spelling of the Modules.'
         )
 
-        super().__init__(module, line_num, msg)
+        super().__init__(msg)
