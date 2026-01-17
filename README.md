@@ -1,44 +1,56 @@
 # EZ Module Manager
 
-```python
-#PyPI
-python3 -m pip install ezmodulemanager
-```
-[Visit the PyPi repository](https://pypi.org/project/ezmodulemanager/)  
+Modular and powerful. Truly Plug-n-Play.
 
-[View the 'Quick Start' guide](#quick-start-gated-execution)
+
+```python
+# PyPI
+pip install ezmodulemanager
+```
+
+|||
+| :----- | :----- |
+|PyPi repository | https://pypi.org/project/ezmodulemanager/ |
+|Report an issue | https://github.com/Obsidian-Cloud/EZModuleManager/issues |
+|[Quick Start guide](#quick-start-gated-execution) | |
+
+
+
+# Why this 'Service Locator'?
+
+This 'Service Locator' is a structural design pattern designed to decouple object registration from execution. It was popularized by Martin Fowler, a pioneer of software architecture and a co-author of the Agile Manifesto.
+
+## How it works: 'Discovery'
+
+This module uses an event-driven startup sequence. By gating the entry point with if `__name__ == '__main__':`, the system triggers a dynamic import event using importlib.
+
+- Registration: Class, clas methods, and functions use the `@mmreg` decorator 
+to register themselves automatically during the import phase.
+- Resolution: Your logic then uses `get_ob()` to 'grab and go', retrieving the objects it needs without hard-coded import dependencies.
+
+## The 'Black Box' & Future Type Safety
+
+Regarding `type hints`, I recognize that using a locator can 
+create a 'black box'(passing/returning Any). I architected this 
+framework solely for a project that required high flexibility
+where type checking **does not** matter.
+
+- **Current State**: It is a lightweight, high-speed discovery engine.
+- **Future Roadmap**: I am working on a TypeVar type-checking module that will allow you to implement custom type checks on retrieved objects, turning the "black box" into a transparent, type-safe registry.
+
+I’m not trying to replace Dependency Injection. I’m offering a reimagined, Pythonic alternative for developers who value simplicity *without* the bloat of Enterprise frameworks. Check out the source on GitHub to see just how minimal the implementation is.
 
 ---
-
-An **_event-driven_** way to decouple your imports and function calls.  
-
-Simple, modular, and powerful. Truly Plug-n-Play.
-
-You can probably finish reading this with your coffee and understand 
-everything about it.
-
-
-This `Module Manager` is pretty basic to use. It sits between the main 
-application entry point(main.py, app.py, etc) and the rest of the 
-program's modules. The `registry` component of this `Module Manager` 
-sits seemingly isolated at the end, however, it is in my opinion the 
-most powerful feature of this extremely basic system. This system is as 
-bare bones as it gets; zero bloat. No additional imports are needed 
-other than the basic imports explained in this documentation. Other than 
-the awesome functionality you get from this package, you wont even 
-notice it in your way.
-
 
 I'll let it be known that this is my first package. This `Module Manager` 
 is highly inspired by a system I built inside Unreal Engine 5 for 
 registering backend factory components. This system works in the same 
 way as that Unreal Engine system. There's a main `registry` component that 
-holds references to all shared objects. In python, that's everything. When 
+holds references to all 'registered' objects. In python, that's everything. When 
 an object lives in `module_A.py`, you can call it from `module_B.py` and 
-neither modules know about one another, thus eliminating circular 
-dependencies, while maintaining complete control over your codebase.
+neither modules know about one another.
 
-To get a mental model before we start, it looks/works like this :
+To get a mental model before we start, it looks/works like this:
 
 ```mermaid
 graph TD;
@@ -56,7 +68,7 @@ classDef whiteClass fill:#ffffff,stroke:#333,stroke-width:2px;
 ---  
 # Quick Start Guide (Gated Execution)
 
-### main.py
+main.py
 ```python
 # main.py
 from ezmodulemanager.module_manager import import_modlist
@@ -76,7 +88,7 @@ main = get_obj('module_B', 'main')
 main()
 ```
 ---
-### module_A
+module_A.py
 ```python
 # module_A.py
 # Need to import these two functions
@@ -104,7 +116,7 @@ knight = KnightsOfNi('shrubbery').give_offering('shrubbery')
 register_obj(knight, 'knight_of_ni', __file__)
 ```
 ---
-### module_B
+module_B.py
 ```python
 # module_B.py
 from ezmodulemanager.registry import get_obj, mmreg
